@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.android.superhero.ui.search.SearchViewModel" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/spacing_default">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/search_results"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/recycler_height"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:searchResults="@{viewModel.searchResults}"
+                tools:itemCount="4"
+                tools:listitem="@layout/item_search_result" />
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/search_results"
+                app:layout_constraintEnd_toEndOf="@id/search_results"
+                app:layout_constraintStart_toStartOf="@id/search_results"
+                app:layout_constraintTop_toTopOf="@id/search_results"
+                app:loading="@{viewModel.loadingSearchResults}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search_result_empty"
+                android:textSize="@dimen/description"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/search_results"
+                app:layout_constraintEnd_toEndOf="@id/search_results"
+                app:layout_constraintStart_toStartOf="@id/search_results"
+                app:layout_constraintTop_toTopOf="@id/search_results"
+                app:searchResultEmpty="@{viewModel.searchResults}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search_result_error"
+                android:textSize="@dimen/description"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/search_results"
+                app:layout_constraintEnd_toEndOf="@id/search_results"
+                app:layout_constraintStart_toStartOf="@id/search_results"
+                app:layout_constraintTop_toTopOf="@id/search_results"
+                app:searchResultError="@{viewModel.searchError}" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                android:padding="@dimen/spacing_default"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/search_results" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>
