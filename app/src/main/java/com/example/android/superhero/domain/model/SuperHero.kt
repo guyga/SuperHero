@@ -10,10 +10,3 @@ data class SuperHero(
     var connections: SuperHeroConnections,
     var image: SuperHeroImage
 )
-
-fun SuperHero.toRecommendationSuperHero(): SuperHeroRecommendation {
-    return SuperHeroRecommendation(
-        id = this.id,
-        name = this.name
-    )
-}

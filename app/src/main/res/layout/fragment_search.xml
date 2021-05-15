@@ -66,32 +66,46 @@
                 app:layout_constraintTop_toTopOf="@id/search_results"
                 app:searchResultError="@{viewModel.searchError}" />
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:orientation="vertical"
                 android:layout_marginTop="@dimen/spacing_large"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/search_results" >
+                app:layout_constraintTop_toBottomOf="@id/search_results">
 
-                <TextView
+                <ProgressBar
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:loading="@{viewModel.loadingRecommendations}" />
+
+                <TextView
+                    android:id="@+id/recommendationsTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/recommended_superheros"
                     android:textSize="@dimen/title"
-                    android:text="@string/recommended_superheros" />
+                    app:textVisibility="@{viewModel.loadingRecommendations}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recommendations"
                     android:layout_width="match_parent"
-                    android:layout_marginTop="@dimen/spacing_default"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_default"
                     android:orientation="horizontal"
-                    app:recommendations="@{viewModel.recommendations}"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/recommendationsTitle"
+                    app:recommendations="@{viewModel.recommendationsFiltered}"
                     tools:itemCount="3"
-                    tools:listitem="@layout/item_recommendation"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                    tools:listitem="@layout/item_recommendation" />
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

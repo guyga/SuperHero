@@ -5,7 +5,6 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.superhero.domain.model.SuperHero
-import com.example.android.superhero.domain.model.SuperHeroRecommendation
 
 @BindingAdapter("searchResults")
 fun bindSearchResults(recyclerView: RecyclerView, results: List<SuperHero>?) {
@@ -29,9 +28,14 @@ fun bindSearchError(textView: TextView, error: Boolean) {
 }
 
 @BindingAdapter("recommendations")
-fun bindRecommendations(
-    recyclerView: RecyclerView,
-    recommendations: List<SuperHeroRecommendation>?
-) {
+fun bindRecommendations(recyclerView: RecyclerView, recommendations: List<SuperHero>?) {
     (recyclerView.adapter as RecommendationAdapter).submitList(recommendations)
+}
+
+@BindingAdapter("textVisibility")
+fun bindTextVisibility(view: View, isLoading: Boolean) {
+    if (isLoading)
+        view.visibility = View.GONE
+    else
+        view.visibility = View.VISIBLE
 }

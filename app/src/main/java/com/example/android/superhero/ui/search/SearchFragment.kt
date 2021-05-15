@@ -24,14 +24,15 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
-        _viewModel = ViewModelProvider(this, SearchViewModelFactory(SuperHeroRepository.superHeroRepository)).get(SearchViewModel::class.java)
+        _viewModel = ViewModelProvider(
+            this,
+            SearchViewModelFactory(SuperHeroRepository.superHeroRepository)
+        ).get(SearchViewModel::class.java)
 
         _binding.viewModel = _viewModel
         _binding.lifecycleOwner = viewLifecycleOwner
         _binding.searchResults.adapter = SearchAdapter()
         _binding.recommendations.adapter = RecommendationAdapter()
-
-        setHasOptionsMenu(true)
 
         return _binding.root
     }
@@ -53,6 +54,12 @@ class SearchFragment : Fragment() {
                 )
             )
         )
+
+        _viewModel.loadingRecommendations.observe(viewLifecycleOwner) {
+            if (!it) {
+                setHasOptionsMenu(true)
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

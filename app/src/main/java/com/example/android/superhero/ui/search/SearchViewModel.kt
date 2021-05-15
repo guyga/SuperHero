@@ -2,8 +2,6 @@ package com.example.android.superhero.ui.search
 
 import androidx.lifecycle.*
 import com.example.android.superhero.domain.model.SuperHero
-import com.example.android.superhero.domain.model.SuperHeroRecommendation
-import com.example.android.superhero.domain.model.toRecommendationSuperHero
 import com.example.android.superhero.repository.SuperHeroRepository
 import kotlinx.coroutines.launch
 
@@ -21,45 +19,69 @@ class SearchViewModel(private val superHeroRepository: SuperHeroRepository) : Vi
     val searchError: LiveData<Boolean>
         get() = _searchError
 
-    private val _recommendations = MediatorLiveData<ArrayList<SuperHeroRecommendation>>()
-    val recommendations: LiveData<ArrayList<SuperHeroRecommendation>>
-        get() = _recommendations
-    private val _initRecommendations = MutableLiveData<Boolean>()
+    private val _recommendationsUnfiltered = MutableLiveData<ArrayList<SuperHero>?>()
+
+    private val _recommendationsFiltered = MediatorLiveData<ArrayList<SuperHero>?>()
+    val recommendationsFiltered: LiveData<ArrayList<SuperHero>?>
+        get() = _recommendationsFiltered
+
+    private val _loadingRecommendations = MutableLiveData<Boolean>()
+    val loadingRecommendations: LiveData<Boolean>
+        get() = _loadingRecommendations
 
     init {
 
-        _recommendations.addSource(_initRecommendations) {
-            _recommendations.value = generateRecommendations(null)
+        _recommendationsFiltered.addSource(_recommendationsUnfiltered) {
+            _recommendationsFiltered.value = getFilteredRecommendations(null)
         }
-        _recommendations.addSource(_searchResults) { results ->
+        _recommendationsFiltered.addSource(_searchResults) { results ->
             results?.let {
-                var currentRecommendation = _recommendations.value!!
-                for (superHero in it) {
-                    val asRecommendation = superHero.toRecommendationSuperHero()
-                    if (currentRecommendation.contains(asRecommendation)) {
-                        currentRecommendation = generateRecommendations(asRecommendation)
-                        break
+                var recommendations = _recommendationsUnfiltered.value
+                if (recommendations != null) {
+                    for (superHero in recommendations!!) {
+                        if (it.contains(superHero)) {
+                            recommendations = getFilteredRecommendations(superHero)
+                            break
+                        }
                     }
                 }
-                _recommendations.value = currentRecommendation
+                _recommendationsFiltered.value = recommendations
             }
         }
 
-        _initRecommendations.value = true
+        fetchRecommendations()
     }
 
-    private fun generateRecommendations(exclude: SuperHeroRecommendation?): ArrayList<SuperHeroRecommendation> {
-        val recommendations = arrayListOf<SuperHeroRecommendation>(
-            SuperHeroRecommendation("246", "Etrigan"),
-            SuperHeroRecommendation("514", "Penguin"),
-            SuperHeroRecommendation("46", "Arsenal"),
-            SuperHeroRecommendation("326", "Hiro Nakamura")
-        )
+    private fun fetchRecommendations() {
+        _loadingRecommendations.value = true
+        viewModelScope.launch {
+            try {
+                val etrigan = superHeroRepository.getSuperHero("246")!!
+                val penguin = superHeroRepository.getSuperHero("514")!!
+                val arsenal = superHeroRepository.getSuperHero("46")!!
+                val hiroNakamura = superHeroRepository.getSuperHero("326")!!
 
-        if (exclude == null)
-            recommendations.removeLast()
-        else
-            recommendations.remove(exclude)
+                val recommendations = arrayListOf<SuperHero>(
+                    etrigan, penguin, arsenal, hiroNakamura
+                )
+                _recommendationsUnfiltered.postValue(recommendations)
+            } catch (e: Exception) {
+                _recommendationsUnfiltered.postValue(null)
+            }
+            finally {
+                _loadingRecommendations.value = false
+            }
+        }
+    }
+
+    private fun getFilteredRecommendations(exclude: SuperHero?): ArrayList<SuperHero>? {
+        val recommendations = _recommendationsUnfiltered.value?.clone() as ArrayList<SuperHero>?
+        recommendations?.let {
+            if (exclude == null)
+                recommendations.removeLast()
+            else
+                recommendations.remove(exclude)
+        }
         return recommendations
     }
 
