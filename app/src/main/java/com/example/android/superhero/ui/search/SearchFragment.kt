@@ -15,24 +15,43 @@ import com.example.android.superhero.databinding.FragmentSearchBinding
 class SearchFragment : Fragment() {
 
     private lateinit var _viewModel: SearchViewModel
+    private lateinit var _binding: FragmentSearchBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentSearchBinding.inflate(inflater, container, false)
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
         _viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
 
-        binding.viewModel = _viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.searchResults.isNestedScrollingEnabled = false
-        binding.searchResults.adapter = SearchAdapter()
-        binding.recommendations.adapter = RecommendationAdapter()
+        _binding.viewModel = _viewModel
+        _binding.lifecycleOwner = viewLifecycleOwner
+        _binding.searchResults.adapter = SearchAdapter()
+        _binding.recommendations.adapter = RecommendationAdapter()
 
         setHasOptionsMenu(true)
 
-        return binding.root
+        return _binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        _binding.searchResults.addItemDecoration(
+            HorizontalSpacingItemDecoration(
+                resources.getDimensionPixelSize(
+                    R.dimen.spacing_default
+                )
+            )
+        )
+        _binding.recommendations.addItemDecoration(
+            HorizontalSpacingItemDecoration(
+                resources.getDimensionPixelSize(
+                    R.dimen.spacing_default
+                )
+            )
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -59,6 +78,21 @@ class SearchFragment : Fragment() {
             val imm =
                 requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             imm?.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+    }
+
+    class HorizontalSpacingItemDecoration(private val spacingPx: Int) :
+        RecyclerView.ItemDecoration() {
+        override fun getItemOffsets(
+            outRect: Rect,
+            view: View,
+            parent: RecyclerView,
+            state: RecyclerView.State
+        ) {
+            val pos = parent.getChildAdapterPosition(view)
+            val applyMargin = pos != parent.adapter!!.itemCount - 1
+            if (applyMargin)
+                outRect.right = spacingPx
         }
     }
 }

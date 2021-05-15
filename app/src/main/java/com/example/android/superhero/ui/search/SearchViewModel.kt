@@ -55,7 +55,7 @@ class SearchViewModel : ViewModel() {
             SuperHeroRecommendation("246", "Etrigan"),
             SuperHeroRecommendation("514", "Penguin"),
             SuperHeroRecommendation("46", "Arsenal"),
-            SuperHeroRecommendation("326", "Hiro Nakamura"),
+            SuperHeroRecommendation("326", "Hiro Nakamura")
         )
 
         if(exclude == null)
