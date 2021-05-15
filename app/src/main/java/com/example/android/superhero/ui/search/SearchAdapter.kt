@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android.superhero.databinding.ItemSearchResultBinding
 import com.example.android.superhero.domain.model.SuperHero
 
-class SearchAdapter : ListAdapter<SuperHero, SearchAdapter.SuperHeroHolder>(SuperHeroDiff()) {
+class SearchAdapter(
+    private val onSuperHeroSelectedListener: OnSuperHeroSelectedListener
+) : ListAdapter<SuperHero, SearchAdapter.SuperHeroHolder>(SuperHeroDiff()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SuperHeroHolder {
         val binding =
@@ -18,12 +20,17 @@ class SearchAdapter : ListAdapter<SuperHero, SearchAdapter.SuperHeroHolder>(Supe
 
     override fun onBindViewHolder(holder: SuperHeroHolder, position: Int) {
         val superHero = getItem(position)
-        holder.bind(superHero)
+        holder.bind(superHero, onSuperHeroSelectedListener)
     }
 
     class SuperHeroHolder(private val binding: ItemSearchResultBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(superHero: SuperHero) {
+        fun bind(superHero: SuperHero, onSuperHeroSelectedListener: OnSuperHeroSelectedListener) {
+            binding.root.setOnClickListener {
+                onSuperHeroSelectedListener.onSuperHeroSelected(
+                    superHero
+                )
+            }
             binding.superHero = superHero
             binding.executePendingBindings()
         }
@@ -37,6 +44,5 @@ class SearchAdapter : ListAdapter<SuperHero, SearchAdapter.SuperHeroHolder>(Supe
         override fun areContentsTheSame(oldItem: SuperHero, newItem: SuperHero): Boolean {
             return oldItem == newItem
         }
-
     }
 }

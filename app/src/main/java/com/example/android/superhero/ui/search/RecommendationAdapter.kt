@@ -8,10 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android.superhero.databinding.ItemRecommendationBinding
 import com.example.android.superhero.domain.model.SuperHero
 
-class RecommendationAdapter :
-    ListAdapter<SuperHero, RecommendationAdapter.RecommendationHolder>(
-        RecommendationDiff()
-    ) {
+class RecommendationAdapter(
+    private val onSuperHeroSelectedListener: OnSuperHeroSelectedListener
+) : ListAdapter<SuperHero, RecommendationAdapter.RecommendationHolder>(RecommendationDiff()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecommendationHolder {
         val binding =
@@ -21,12 +20,17 @@ class RecommendationAdapter :
 
     override fun onBindViewHolder(holder: RecommendationHolder, position: Int) {
         val recommendation = getItem(position)
-        holder.bind(recommendation)
+        holder.bind(recommendation, onSuperHeroSelectedListener)
     }
 
     class RecommendationHolder(private val binding: ItemRecommendationBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(superHero: SuperHero) {
+        fun bind(superHero: SuperHero, onSuperHeroSelectedListener: OnSuperHeroSelectedListener) {
+            binding.root.setOnClickListener {
+                onSuperHeroSelectedListener.onSuperHeroSelected(
+                    superHero
+                )
+            }
             binding.superHero = superHero
             binding.executePendingBindings()
         }
@@ -40,7 +44,6 @@ class RecommendationAdapter :
         override fun areContentsTheSame(oldItem: SuperHero, newItem: SuperHero): Boolean {
             return oldItem == newItem
         }
-
     }
 
 

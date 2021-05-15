@@ -7,5 +7,17 @@
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.android.superhero.ui.search.SearchFragment"
-        android:label="SearchFragment" />
+        android:label="SearchFragment" >
+        <action
+            android:id="@+id/action_searchFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.example.android.superhero.ui.details.DetailsFragment"
+        android:label="DetailsFragment" >
+        <argument
+            android:name="superhero"
+            app:argType="com.example.android.superhero.domain.model.SuperHero" />
+    </fragment>
 </navigation>

@@ -8,9 +8,11 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.superhero.R
 import com.example.android.superhero.databinding.FragmentSearchBinding
+import com.example.android.superhero.domain.model.SuperHero
 import com.example.android.superhero.repository.SuperHeroRepository
 
 class SearchFragment : Fragment() {
@@ -31,8 +33,6 @@ class SearchFragment : Fragment() {
 
         _binding.viewModel = _viewModel
         _binding.lifecycleOwner = viewLifecycleOwner
-        _binding.searchResults.adapter = SearchAdapter()
-        _binding.recommendations.adapter = RecommendationAdapter()
 
         return _binding.root
     }
@@ -40,6 +40,10 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val superHeroSelectedListener = OnSuperHeroSelectedListener(::onSuperHeroSelected)
+
+        _binding.searchResults.adapter = SearchAdapter(superHeroSelectedListener)
+        _binding.recommendations.adapter = RecommendationAdapter(superHeroSelectedListener)
         _binding.searchResults.addItemDecoration(
             HorizontalSpacingItemDecoration(
                 resources.getDimensionPixelSize(
@@ -60,6 +64,21 @@ class SearchFragment : Fragment() {
                 setHasOptionsMenu(true)
             }
         }
+
+        _viewModel.navigateToDetails.observe(viewLifecycleOwner) {
+            it?.let { superHero ->
+                findNavController().navigate(
+                    SearchFragmentDirections.actionSearchFragmentToDetailsFragment(
+                        superHero
+                    )
+                )
+                _viewModel.onNavigateToDetailsComplete()
+            }
+        }
+    }
+
+    private fun onSuperHeroSelected(superHero: SuperHero) {
+        _viewModel.navigateToDetails(superHero)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

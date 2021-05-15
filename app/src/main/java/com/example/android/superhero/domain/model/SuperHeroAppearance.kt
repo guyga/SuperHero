@@ -1,5 +1,9 @@
 package com.example.android.superhero.domain.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class SuperHeroAppearance(
     var gender: String,
     var race: String,
@@ -7,4 +11,4 @@ data class SuperHeroAppearance(
     var weight: List<String>,
     var eyeColor: String,
     var hairColor: String,
-)
+) : Parcelable

@@ -29,6 +29,10 @@ class SearchViewModel(private val superHeroRepository: SuperHeroRepository) : Vi
     val loadingRecommendations: LiveData<Boolean>
         get() = _loadingRecommendations
 
+    private val _navigateToDetails = MutableLiveData<SuperHero?>()
+    val navigateToDetails: LiveData<SuperHero?>
+        get() = _navigateToDetails
+
     init {
 
         _recommendationsFiltered.addSource(_recommendationsUnfiltered) {
@@ -38,12 +42,16 @@ class SearchViewModel(private val superHeroRepository: SuperHeroRepository) : Vi
             results?.let {
                 var recommendations = _recommendationsUnfiltered.value
                 if (recommendations != null) {
+                    var contains = false
                     for (superHero in recommendations!!) {
                         if (it.contains(superHero)) {
+                            contains = true
                             recommendations = getFilteredRecommendations(superHero)
                             break
                         }
                     }
+                    if (!contains)
+                        recommendations = getFilteredRecommendations(null)
                 }
                 _recommendationsFiltered.value = recommendations
             }
@@ -67,8 +75,7 @@ class SearchViewModel(private val superHeroRepository: SuperHeroRepository) : Vi
                 _recommendationsUnfiltered.postValue(recommendations)
             } catch (e: Exception) {
                 _recommendationsUnfiltered.postValue(null)
-            }
-            finally {
+            } finally {
                 _loadingRecommendations.value = false
             }
         }
@@ -99,6 +106,14 @@ class SearchViewModel(private val superHeroRepository: SuperHeroRepository) : Vi
                 _loadingSearchResults.value = false
             }
         }
+    }
+
+    fun navigateToDetails(superHero: SuperHero) {
+        _navigateToDetails.value = superHero
+    }
+
+    fun onNavigateToDetailsComplete() {
+        _navigateToDetails.value = null
     }
 
 }
