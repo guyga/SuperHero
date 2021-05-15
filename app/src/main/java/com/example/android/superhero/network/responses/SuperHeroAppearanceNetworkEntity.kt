@@ -1,6 +1,6 @@
 package com.example.android.superhero.network.responses
 
-import com.example.android.superhero.domain.model.SuperHeroAppearance
+import com.example.android.superhero.database.model.SuperHeroAppearanceDatabaseEntity
 import com.google.gson.annotations.SerializedName
 
 class SuperHeroAppearanceNetworkEntity(
@@ -13,8 +13,8 @@ class SuperHeroAppearanceNetworkEntity(
     @SerializedName("hair-color")
     var hairColor: String,
 ) {
-    fun toDomainAppearance(): SuperHeroAppearance {
-        return SuperHeroAppearance(
+    fun toDatabaseAppearance(): SuperHeroAppearanceDatabaseEntity {
+        return SuperHeroAppearanceDatabaseEntity(
             gender = this.gender,
             race = this.race,
             height = this.height,

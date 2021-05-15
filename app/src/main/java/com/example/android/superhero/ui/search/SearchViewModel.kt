@@ -7,9 +7,7 @@ import com.example.android.superhero.domain.model.toRecommendationSuperHero
 import com.example.android.superhero.repository.SuperHeroRepository
 import kotlinx.coroutines.launch
 
-class SearchViewModel : ViewModel() {
-
-    private val _superHeroRepository = SuperHeroRepository()
+class SearchViewModel(private val superHeroRepository: SuperHeroRepository) : ViewModel() {
 
     private val _searchResults = MutableLiveData<List<SuperHero>?>()
     val searchResults: LiveData<List<SuperHero>?>
@@ -38,7 +36,7 @@ class SearchViewModel : ViewModel() {
                 var currentRecommendation = _recommendations.value!!
                 for (superHero in it) {
                     val asRecommendation = superHero.toRecommendationSuperHero()
-                    if (currentRecommendation.contains(asRecommendation)){
+                    if (currentRecommendation.contains(asRecommendation)) {
                         currentRecommendation = generateRecommendations(asRecommendation)
                         break
                     }
@@ -58,7 +56,7 @@ class SearchViewModel : ViewModel() {
             SuperHeroRecommendation("326", "Hiro Nakamura")
         )
 
-        if(exclude == null)
+        if (exclude == null)
             recommendations.removeLast()
         else
             recommendations.remove(exclude)
@@ -70,7 +68,7 @@ class SearchViewModel : ViewModel() {
             _loadingSearchResults.value = true
             _searchError.value = false
             try {
-                val heroesList = _superHeroRepository.searchSuperHero(name)
+                val heroesList = superHeroRepository.searchSuperHero(name)
                 _searchResults.value = heroesList ?: ArrayList()
             } catch (e: Exception) {
                 _searchResults.value = null

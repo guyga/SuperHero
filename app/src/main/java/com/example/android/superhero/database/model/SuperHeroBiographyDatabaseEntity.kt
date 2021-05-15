@@ -1,24 +1,22 @@
-package com.example.android.superhero.network.responses
+package com.example.android.superhero.database.model
 
-import com.example.android.superhero.database.model.SuperHeroBiographyDatabaseEntity
-import com.google.gson.annotations.SerializedName
+import androidx.room.TypeConverters
+import com.example.android.superhero.database.converters.StringListConverter
+import com.example.android.superhero.domain.model.SuperHeroBiography
 
-class SuperHeroBiographyNetworkEntity(
-    @SerializedName("full-name")
+class SuperHeroBiographyDatabaseEntity(
     var fullName: String,
-    @SerializedName("alter-egos")
     var alterEgos: String,
+    @TypeConverters(StringListConverter::class)
     var aliases: List<String>,
-    @SerializedName("place-of-birth")
     var placeOfBirth: String,
-    @SerializedName("first-appearance")
     var firstAppearance: String,
     var publisher: String,
     var alignment: String,
 ) {
 
-    fun toDatabaseBiography(): SuperHeroBiographyDatabaseEntity {
-        return SuperHeroBiographyDatabaseEntity(
+    fun toDomainBiography(): SuperHeroBiography {
+        return SuperHeroBiography(
             fullName = this.fullName,
             alterEgos = this.alterEgos,
             aliases = this.aliases,

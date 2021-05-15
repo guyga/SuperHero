@@ -1,8 +1,8 @@
-package com.example.android.superhero.network.responses
+package com.example.android.superhero.database.model
 
-import com.example.android.superhero.database.model.SuperHeroPowerStatsDatabaseEntity
+import com.example.android.superhero.domain.model.SuperHeroPowerStats
 
-class SuperHeroPowerStatsNetworkEntity(
+class SuperHeroPowerStatsDatabaseEntity(
     var intelligence: String,
     var strength: String,
     var speed: String,
@@ -10,8 +10,8 @@ class SuperHeroPowerStatsNetworkEntity(
     var power: String,
     var combat: String,
 ) {
-    fun toDatabasePowerStats(): SuperHeroPowerStatsDatabaseEntity {
-        return SuperHeroPowerStatsDatabaseEntity(
+    fun toDomainPowerStats(): SuperHeroPowerStats {
+        return SuperHeroPowerStats(
             intelligence = this.intelligence,
             strength = this.strength,
             speed = this.speed,

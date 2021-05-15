@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.superhero.R
 import com.example.android.superhero.databinding.FragmentSearchBinding
+import com.example.android.superhero.repository.SuperHeroRepository
 
 class SearchFragment : Fragment() {
 
@@ -23,7 +24,7 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
-        _viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
+        _viewModel = ViewModelProvider(this, SearchViewModelFactory(SuperHeroRepository.getInstance(requireActivity()))).get(SearchViewModel::class.java)
 
         _binding.viewModel = _viewModel
         _binding.lifecycleOwner = viewLifecycleOwner

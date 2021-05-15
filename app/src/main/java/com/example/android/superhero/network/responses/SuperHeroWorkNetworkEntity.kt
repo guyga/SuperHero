@@ -1,13 +1,13 @@
 package com.example.android.superhero.network.responses
 
-import com.example.android.superhero.domain.model.SuperHeroWork
+import com.example.android.superhero.database.model.SuperHeroWorkDatabaseEntity
 
 class SuperHeroWorkNetworkEntity(
     var occupation: String,
     var base: String
 ) {
-    fun toDomainWork(): SuperHeroWork {
-        return SuperHeroWork(
+    fun toDatabaseWork(): SuperHeroWorkDatabaseEntity {
+        return SuperHeroWorkDatabaseEntity(
             occupation = this.occupation,
             base = this.base
         )

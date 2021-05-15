@@ -1,6 +1,6 @@
 package com.example.android.superhero.network.responses
 
-import com.example.android.superhero.domain.model.SuperHeroConnections
+import com.example.android.superhero.database.model.SuperHeroConnectionsDatabaseEntity
 import com.google.gson.annotations.SerializedName
 
 class SuperHeroConnectionsNetworkEntity(
@@ -8,8 +8,8 @@ class SuperHeroConnectionsNetworkEntity(
     var groupAffiliation: String,
     var relatives: String
 ) {
-    fun toDomainConnections(): SuperHeroConnections {
-        return SuperHeroConnections(
+    fun toDatabaseConnections(): SuperHeroConnectionsDatabaseEntity {
+        return SuperHeroConnectionsDatabaseEntity(
             groupAffiliation = this.groupAffiliation,
             relatives = this.relatives
         )
