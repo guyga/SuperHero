@@ -3,4 +3,5 @@
     <string name="title_search">Search</string>
     <string name="search_result_error">Error loading search results. Please try again later</string>
     <string name="search_result_empty">No results. Try to search something else</string>
+    <string name="recommended_superheros">Recommended SuperHeros</string>
 </resources>

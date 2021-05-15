@@ -1,13 +1,14 @@
 package com.example.android.superhero.ui.search
 
 import android.content.Context
+import android.graphics.Rect
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import com.example.android.superhero.R
 import com.example.android.superhero.databinding.FragmentSearchBinding
 
@@ -25,7 +26,9 @@ class SearchFragment : Fragment() {
 
         binding.viewModel = _viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+        binding.searchResults.isNestedScrollingEnabled = false
         binding.searchResults.adapter = SearchAdapter()
+        binding.recommendations.adapter = RecommendationAdapter()
 
         setHasOptionsMenu(true)
 
