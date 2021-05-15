@@ -1,5 +1,6 @@
 package com.example.android.superhero.network.responses
 
+import com.example.android.superhero.database.model.SuperHeroBiographyDatabaseEntity
 import com.example.android.superhero.domain.model.SuperHeroBiography
 import com.google.gson.annotations.SerializedName
 
@@ -19,6 +20,18 @@ class SuperHeroBiographyNetworkEntity(
 
     fun toDomainBiography(): SuperHeroBiography {
         return SuperHeroBiography(
+            fullName = this.fullName,
+            alterEgos = this.alterEgos,
+            aliases = this.aliases,
+            placeOfBirth = this.placeOfBirth,
+            firstAppearance = this.firstAppearance,
+            publisher = this.publisher,
+            alignment = this.alignment
+        )
+    }
+
+    fun toDatabaseBiography(): SuperHeroBiographyDatabaseEntity {
+        return SuperHeroBiographyDatabaseEntity(
             fullName = this.fullName,
             alterEgos = this.alterEgos,
             aliases = this.aliases,

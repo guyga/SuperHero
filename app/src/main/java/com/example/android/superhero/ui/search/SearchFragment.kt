@@ -26,7 +26,7 @@ class SearchFragment : Fragment() {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         _viewModel = ViewModelProvider(
             this,
-            SearchViewModelFactory(SuperHeroRepository.superHeroRepository)
+            SearchViewModelFactory(SuperHeroRepository.getInstance(requireActivity()))
         ).get(SearchViewModel::class.java)
 
         _binding.viewModel = _viewModel

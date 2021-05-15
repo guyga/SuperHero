@@ -1,5 +1,6 @@
 package com.example.android.superhero.network.responses
 
+import com.example.android.superhero.database.model.SuperHeroDatabaseEntity
 import com.example.android.superhero.domain.model.SuperHero
 
 class SuperHeroNetworkEntity(
@@ -25,9 +26,26 @@ class SuperHeroNetworkEntity(
             image = this.image.toDomainImage()
         )
     }
+
+    fun toDatabaseSuperHero(): SuperHeroDatabaseEntity {
+        return SuperHeroDatabaseEntity(
+            id = this.id,
+            name = this.name,
+            powerstats = this.powerstats.toDatabasePowerStats(),
+            biography = this.biography.toDatabaseBiography(),
+            appearance = this.appearance.toDatabaseAppearance(),
+            work = this.work.toDatabaseWork(),
+            connections = this.connections.toDatabaseConnections(),
+            image = this.image.toDatabaseImage()
+        )
+    }
 }
 
 fun List<SuperHeroNetworkEntity>.toDomainSuperHeroes(): List<SuperHero> {
     return this.map { it.toDomainSuperHero() }
+}
+
+fun List<SuperHeroNetworkEntity>.toDatabaseSuperHeroes(): List<SuperHeroDatabaseEntity> {
+    return this.map { it.toDatabaseSuperHero() }
 }
 
