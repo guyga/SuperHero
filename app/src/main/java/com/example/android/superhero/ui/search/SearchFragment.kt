@@ -1,5 +1,7 @@
 package com.example.android.superhero.ui.search
 
+import android.animation.Animator
+import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
@@ -88,7 +90,7 @@ class SearchFragment : Fragment() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 hideKeyboard()
                 if (query != null)
-                    _viewModel.searchSuperHero(query)
+                    animateSearchResultsHeight(query)
                 return true
             }
 
@@ -105,6 +107,42 @@ class SearchFragment : Fragment() {
             val imm =
                 requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             imm?.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+    }
+
+    private fun animateSearchResultsHeight(query: String) {
+        val searchRecycler = _binding.searchResults
+        val currentHeight = searchRecycler.measuredHeight
+        val destHeight = resources.getDimensionPixelSize(R.dimen.recycler_height)
+
+        if (currentHeight != destHeight) {
+            val valueAnimator = ValueAnimator.ofInt(currentHeight, destHeight)
+            valueAnimator.duration = 250L
+            valueAnimator.addUpdateListener {
+                val animatedValue = valueAnimator.animatedValue as Int
+                val layoutParams = searchRecycler.layoutParams
+                layoutParams.height = animatedValue
+                searchRecycler.layoutParams = layoutParams
+            }
+            valueAnimator.addListener(object : Animator.AnimatorListener {
+                override fun onAnimationStart(animation: Animator?) {
+
+                }
+
+                override fun onAnimationEnd(animation: Animator?) {
+                    _viewModel.searchSuperHero(query)
+                }
+
+                override fun onAnimationCancel(animation: Animator?) {
+                }
+
+                override fun onAnimationRepeat(animation: Animator?) {
+                }
+
+            })
+            valueAnimator.start()
+        } else {
+            _viewModel.searchSuperHero(query)
         }
     }
 
