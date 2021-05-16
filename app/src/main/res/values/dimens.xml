@@ -4,7 +4,8 @@
     <dimen name="spacing_default">16dp</dimen>
     <dimen name="spacing_small">8dp</dimen>
 
-    <dimen name="title">16sp</dimen>
+    <dimen name="title">24sp</dimen>
+    <dimen name="subtitle">16sp</dimen>
     <dimen name="description">12sp</dimen>
 
     <dimen name="recycler_height">350dp</dimen>

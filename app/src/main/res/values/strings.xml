@@ -1,7 +1,13 @@
 <resources>
     <string name="app_name">SuperHero</string>
+
     <string name="title_search">Search</string>
     <string name="search_result_error">Error loading search results. Please try again later</string>
     <string name="search_result_empty">No results. Try to search something else</string>
-    <string name="recommended_superheros">Recommended SuperHeros</string>
+    <string name="recommended_superheroes">Recommended SuperHeroes</string>
+
+    <string name="details_first_appearance">First appeared at %s</string>
+    <string name="details_alignment">Hero`s Alignment: %s</string>
+    <string name="details_publisher">Published by %s</string>
+    <string name="unknown">Unknown</string>
 </resources>

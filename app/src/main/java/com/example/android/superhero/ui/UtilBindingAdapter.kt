@@ -5,6 +5,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterInside
 import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
@@ -38,7 +39,7 @@ fun bindImagePath(imageView: ImageView, poster_path: String?) {
             .load(poster_path)
             .apply(
                 RequestOptions()
-                    .transform(FitCenter(), RoundedCorners(16))
+                    .transform(CenterInside(), RoundedCorners(16))
                     .placeholder(R.drawable.loading_animation)
                     .error(R.drawable.ic_broken_image)
             )

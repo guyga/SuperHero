@@ -19,9 +19,10 @@
 
         <ImageView
             android:id="@+id/image"
-            android:layout_width="@dimen/image_width"
+            android:layout_width="wrap_content"
             android:layout_height="@dimen/image_height"
-            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:scaleType="centerInside"
             app:image="@{superHero.image.url}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

@@ -26,8 +26,14 @@ class DetailsFragment : Fragment() {
         ).get(DetailsViewModel::class.java)
 
         val superHero = DetailsFragmentArgs.fromBundle(requireArguments()).superhero
-        _binding.tt.text = superHero.name
+        _binding.superHero = superHero
 
         return _binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
     }
 }
