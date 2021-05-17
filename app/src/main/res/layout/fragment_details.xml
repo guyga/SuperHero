@@ -20,27 +20,15 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/spacing_default">
 
-            <TextView
-                android:id="@+id/name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/title"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:text="@{superHero.name}"
-                tools:text="Batman" />
-
             <ImageView
                 android:id="@+id/image"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:scaleType="centerInside"
-                android:layout_marginTop="@dimen/spacing_small"
                 app:image="@{superHero.image.url}"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/name"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent="0.75"
                 tools:src="@tools:sample/backgrounds/scenic" />
 

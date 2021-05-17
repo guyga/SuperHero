@@ -87,10 +87,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/recommended_superheroes"
+                    android:textColor="?android:attr/textColorPrimary"
                     android:textSize="@dimen/subtitle"
-                    app:textVisibility="@{viewModel.loadingRecommendations}"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:textVisibility="@{viewModel.loadingRecommendations}" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recommendations"

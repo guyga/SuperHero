@@ -71,7 +71,7 @@ class SearchFragment : Fragment() {
             it?.let { superHero ->
                 findNavController().navigate(
                     SearchFragmentDirections.actionSearchFragmentToDetailsFragment(
-                        superHero
+                        superHero, superHero.name
                     )
                 )
                 _viewModel.onNavigateToDetailsComplete()

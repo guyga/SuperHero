@@ -28,6 +28,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="@dimen/spacing_default"
+            android:textColor="?android:attr/textColorPrimary"
             app:text="@{superHero.name}"
             tools:text="Batman" />
 
