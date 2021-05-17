@@ -9,5 +9,8 @@
     <string name="details_first_appearance">First appeared at %s</string>
     <string name="details_alignment">Hero`s Alignment: %s</string>
     <string name="details_publisher">Published by %s</string>
+    <string name="details_group_affiliation">%1s`s Group Affiliations:\n%2s</string>
+    <string name="details_gender">Is gender is %s</string>
+    <string name="details_stats">He has a %1s power stat\nand a %2s speed stat</string>
     <string name="unknown">Unknown</string>
 </resources>
