@@ -1,11 +1,14 @@
 package com.example.android.superhero.ui.search
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.android.superhero.domain.model.SuperHero
 import com.example.android.superhero.repository.SuperHeroRepository
 import kotlinx.coroutines.launch
 
 class SearchViewModel(private val superHeroRepository: SuperHeroRepository) : ViewModel() {
+
+    private val TAG = this.javaClass.simpleName
 
     /**
      * LiveData for publishing the search results
@@ -65,6 +68,7 @@ class SearchViewModel(private val superHeroRepository: SuperHeroRepository) : Vi
         - get filtered recommendation while excluding no SuperHero
          */
         _recommendationsFiltered.addSource(_recommendationsUnfiltered) {
+            Log.i(TAG, "Unfiltered recommendations received: $it")
             _recommendationsFiltered.value = getFilteredRecommendations(null)
         }
 
@@ -74,18 +78,22 @@ class SearchViewModel(private val superHeroRepository: SuperHeroRepository) : Vi
          */
         _recommendationsFiltered.addSource(_searchResults) { results ->
             results?.let {
+                Log.i(TAG, "filtering recommendations")
                 var recommendations = _recommendationsUnfiltered.value
                 if (recommendations != null) {
                     var contains = false
                     for (superHero in recommendations!!) {
                         if (it.contains(superHero)) {
+                            Log.i(TAG, "filtering recommendations - duplication found $superHero")
                             contains = true
                             recommendations = getFilteredRecommendations(superHero)
                             break
                         }
                     }
-                    if (!contains)
+                    if (!contains) {
+                        Log.i(TAG, "filtering recommendations - no duplication found")
                         recommendations = getFilteredRecommendations(null)
+                    }
                 }
                 _recommendationsFiltered.value = recommendations
             }
@@ -98,6 +106,7 @@ class SearchViewModel(private val superHeroRepository: SuperHeroRepository) : Vi
      * Retrieves through [SuperHeroRepository.getSuperHero] constant 4 recommendations
      */
     private fun fetchRecommendations() {
+        Log.i(TAG, "fetching recommendations")
         _loadingRecommendations.value = true
         viewModelScope.launch {
             try {
@@ -111,6 +120,7 @@ class SearchViewModel(private val superHeroRepository: SuperHeroRepository) : Vi
                 )
                 _recommendationsUnfiltered.postValue(recommendations)
             } catch (e: Exception) {
+                Log.e(TAG, "fetching recommendations failed: ${e.message}")
                 _recommendationsUnfiltered.postValue(null)
             } finally {
                 _loadingRecommendations.value = false
@@ -125,6 +135,7 @@ class SearchViewModel(private val superHeroRepository: SuperHeroRepository) : Vi
      */
     private fun getFilteredRecommendations(exclude: SuperHero?): ArrayList<SuperHero>? {
         val recommendations = _recommendationsUnfiltered.value?.clone() as ArrayList<SuperHero>?
+        Log.i(TAG, "filtering recommendations. Excluding $exclude")
         recommendations?.let {
             if (exclude == null)
                 recommendations.removeLast()
@@ -139,6 +150,7 @@ class SearchViewModel(private val superHeroRepository: SuperHeroRepository) : Vi
      * to retrieve the data
      */
     fun searchSuperHero(name: String) {
+        Log.i(TAG, "Searching for $name")
         viewModelScope.launch {
             _loadingSearchResults.value = true
             _searchError.value = false
@@ -146,8 +158,10 @@ class SearchViewModel(private val superHeroRepository: SuperHeroRepository) : Vi
                 val heroesList = superHeroRepository.searchSuperHero(name)
                 _searchResults.value = heroesList ?: ArrayList()
             } catch (e: Exception) {
+                Log.e(TAG, "Searching for $name has failed: ${e.message}")
                 _searchResults.value = null
                 _searchError.value = true
+
             } finally {
                 _loadingSearchResults.value = false
             }

@@ -5,6 +5,7 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
@@ -18,7 +19,7 @@ import com.example.android.superhero.domain.model.SuperHero
 import com.example.android.superhero.repository.SuperHeroRepository
 
 class SearchFragment : Fragment() {
-
+    private val TAG = this.javaClass.simpleName
     private lateinit var _viewModel: SearchViewModel
     private lateinit var _binding: FragmentSearchBinding
 
@@ -63,6 +64,7 @@ class SearchFragment : Fragment() {
 
         _viewModel.loadingRecommendations.observe(viewLifecycleOwner) {
             if (!it) {
+                Log.i(TAG, "Recommendation retrievel has ended. Enabling search menu")
                 setHasOptionsMenu(true)
             }
         }
@@ -92,8 +94,10 @@ class SearchFragment : Fragment() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 hideKeyboard()
-                if (query != null)
+                if (query != null) {
+                    Log.i(TAG, "Search query: $query")
                     animateSearchResultsHeight(query)
+                }
                 return true
             }
 
@@ -123,6 +127,7 @@ class SearchFragment : Fragment() {
         val destHeight = resources.getDimensionPixelSize(R.dimen.recycler_height)
 
         if (currentHeight != destHeight) {
+            Log.i(TAG, "First search, animating results height UI")
             val valueAnimator = ValueAnimator.ofInt(currentHeight, destHeight)
             valueAnimator.duration = 250L
             valueAnimator.addUpdateListener {
@@ -137,6 +142,7 @@ class SearchFragment : Fragment() {
                 }
 
                 override fun onAnimationEnd(animation: Animator?) {
+                    Log.i(TAG, "Search UI animation end. Starting the actual search of $query")
                     _viewModel.searchSuperHero(query)
                 }
 
@@ -149,6 +155,7 @@ class SearchFragment : Fragment() {
             })
             valueAnimator.start()
         } else {
+            Log.i(TAG, "Search height is already set. Starting the search for $query")
             _viewModel.searchSuperHero(query)
         }
     }
