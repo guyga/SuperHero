@@ -13,4 +13,16 @@ data class SuperHero(
     var work: SuperHeroWork,
     var connections: SuperHeroConnections,
     var image: SuperHeroImage
-) : Parcelable
+) : Parcelable{
+
+    fun getSharingDetails():String{
+        val stringBuilder = StringBuilder()
+        stringBuilder.append(name).appendLine()
+            .append("Alignment is ").append(biography.alignment).appendLine()
+            .append("Alter Egos: ").append(biography.alterEgos).appendLine()
+            .append("Published by: ").append(biography.publisher).appendLine()
+            .append("Image url: ").append(image.url).appendLine()
+        return stringBuilder.toString()
+    }
+
+}
