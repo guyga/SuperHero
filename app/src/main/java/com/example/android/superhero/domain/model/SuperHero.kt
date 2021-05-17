@@ -1,6 +1,8 @@
 package com.example.android.superhero.domain.model
 
+import android.content.res.Resources
 import android.os.Parcelable
+import com.example.android.superhero.R
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -13,15 +15,15 @@ data class SuperHero(
     var work: SuperHeroWork,
     var connections: SuperHeroConnections,
     var image: SuperHeroImage
-) : Parcelable{
+) : Parcelable {
 
-    fun getSharingDetails():String{
+    fun getSharingDetails(res: Resources): String {
         val stringBuilder = StringBuilder()
         stringBuilder.append(name).appendLine()
-            .append("Alignment is ").append(biography.alignment).appendLine()
-            .append("Alter Egos: ").append(biography.alterEgos).appendLine()
-            .append("Published by: ").append(biography.publisher).appendLine()
-            .append("Image url: ").append(image.url).appendLine()
+            .append(res.getString(R.string.sharing_alignment, biography.alignment)).appendLine()
+            .append(res.getString(R.string.sharing_alter_egos, biography.alterEgos)).appendLine()
+            .append(res.getString(R.string.sharing_publisher, biography.publisher)).appendLine()
+            .append(res.getString(R.string.sharing_image, image.url)).appendLine()
         return stringBuilder.toString()
     }
 

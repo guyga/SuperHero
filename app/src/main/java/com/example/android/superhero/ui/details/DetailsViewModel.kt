@@ -1,5 +1,6 @@
 package com.example.android.superhero.ui.details
 
+import android.content.res.Resources
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,14 +14,23 @@ class DetailsViewModel : ViewModel() {
     val shareSuperHeroDetails: LiveData<String?>
         get() = _shareSuperHeroDetails
 
+    /**
+     * Save the SuperHero
+     */
     fun setSuperHero(superHero: SuperHero) {
         _superHero = superHero
     }
 
-    fun shareSuperHero() {
-        _shareSuperHeroDetails.value = _superHero.getSharingDetails()
+    /**
+     * Generate some SuperHero details string for sharing
+     */
+    fun shareSuperHero(resources: Resources) {
+        _shareSuperHeroDetails.value = _superHero.getSharingDetails(resources)
     }
 
+    /**
+     * Indicate sharing was performed
+     */
     fun onCompleteSharingSuperHer() {
         _shareSuperHeroDetails.value = null
     }

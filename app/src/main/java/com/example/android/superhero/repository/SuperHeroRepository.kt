@@ -11,11 +11,19 @@ class SuperHeroRepository private constructor(
     private val superHeroDao: SuperHeroDao
 ) {
 
+    /**
+     * Search the superheroapi for results matching [name]
+     */
     suspend fun searchSuperHero(name: String): List<SuperHero>? {
         val response = SuperHeroServiceApi.superHeroApi.searchSuperHero(name)
         return response.results?.toDomainSuperHeroes()
     }
 
+    /**
+     * Retrieve SuperHero by id.
+     * Usable when knowing what SuperHero to look for, as opposed to [searchSuperHero] which can retrieve unpredictable results.
+     * Will firstly attempt to retrieve the data locally and then through networking if not found
+     */
     suspend fun getSuperHero(id: String): SuperHero? {
         val cachedSuperHero = superHeroDao.getSuperHero(id)
         if (cachedSuperHero != null)

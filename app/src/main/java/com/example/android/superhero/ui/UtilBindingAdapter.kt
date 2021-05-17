@@ -19,14 +19,6 @@ fun bindLoading(view: View, isLoading: Boolean) {
         view.visibility = View.GONE
 }
 
-@BindingAdapter("error")
-fun bindError(textView: TextView, error: String?) {
-    if (error != null)
-        textView.visibility = View.VISIBLE
-    else
-        textView.visibility = View.GONE
-}
-
 @BindingAdapter("text")
 fun bindText(textView: TextView, text: String) {
     textView.text = text

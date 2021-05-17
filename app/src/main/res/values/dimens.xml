@@ -11,4 +11,5 @@
     <dimen name="recycler_height">350dp</dimen>
     <dimen name="image_height">320dp</dimen>
     <dimen name="image_width">240dp</dimen>
+    <dimen name="card_view_corner_radius">16dp</dimen>
 </resources>

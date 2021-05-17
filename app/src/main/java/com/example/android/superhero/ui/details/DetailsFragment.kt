@@ -33,7 +33,7 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        _viewModel.shareSuperHeroDetails.observe(viewLifecycleOwner){
+        _viewModel.shareSuperHeroDetails.observe(viewLifecycleOwner) {
             it?.let { superHero ->
                 shareSuperHero(superHero)
                 _viewModel.onCompleteSharingSuperHer()
@@ -47,12 +47,15 @@ class DetailsFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.m_share) {
-            _viewModel.shareSuperHero()
+            _viewModel.shareSuperHero(resources)
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private fun shareSuperHero(superHeroDetails: String){
+    /**
+     * Share SuperHero details
+     */
+    private fun shareSuperHero(superHeroDetails: String) {
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND
             putExtra(Intent.EXTRA_TEXT, superHeroDetails)

@@ -79,6 +79,9 @@ class SearchFragment : Fragment() {
         }
     }
 
+    /**
+     * Navigate to SuperHero's details
+     */
     private fun onSuperHeroSelected(superHero: SuperHero) {
         _viewModel.navigateToDetails(superHero)
     }
@@ -110,6 +113,10 @@ class SearchFragment : Fragment() {
         }
     }
 
+    /**
+     * Search results UI starts at 0 height to avoid an empty saved up space above the recommendations UI.
+     * When a search takes place, this animates the height addition if necessary.
+     */
     private fun animateSearchResultsHeight(query: String) {
         val searchRecycler = _binding.searchResults
         val currentHeight = searchRecycler.measuredHeight
@@ -146,6 +153,9 @@ class SearchFragment : Fragment() {
         }
     }
 
+    /**
+     * Decoration for the [RecyclerView] items, implementing horizontal spacing between elements
+     */
     class HorizontalSpacingItemDecoration(private val spacingPx: Int) :
         RecyclerView.ItemDecoration() {
         override fun getItemOffsets(
