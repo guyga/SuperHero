@@ -1,12 +1,17 @@
 package com.example.android.superhero.ui.search
 
 import android.util.Log
+import android.widget.ImageView
 import androidx.lifecycle.*
+import com.example.android.superhero.domain.ImageLoader
 import com.example.android.superhero.domain.model.SuperHero
 import com.example.android.superhero.repository.SuperHeroRepository
 import kotlinx.coroutines.launch
 
-class SearchViewModel(private val superHeroRepository: SuperHeroRepository) : ViewModel() {
+class SearchViewModel(
+    private val superHeroRepository: SuperHeroRepository,
+    private val imageLoader: ImageLoader
+) : ViewModel() {
 
     private val TAG = this.javaClass.simpleName
 
@@ -182,6 +187,16 @@ class SearchViewModel(private val superHeroRepository: SuperHeroRepository) : Vi
         _navigateToDetails.value = null
     }
 
+    fun loadImage(imageView: ImageView, url: String){
+        viewModelScope.launch {
+            try {
+                imageLoader.loadImage(imageView, url)
+            }
+            catch (e: Exception){
+                Log.e(TAG, "Loading image as failed ${e.message}")
+            }
+        }
+    }
 }
 
 

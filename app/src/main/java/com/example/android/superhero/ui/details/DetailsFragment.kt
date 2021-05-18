@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.android.superhero.R
 import com.example.android.superhero.databinding.FragmentDetailsBinding
+import com.example.android.superhero.domain.ImageLoader
 
 class DetailsFragment : Fragment() {
 
@@ -19,7 +20,10 @@ class DetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
-        _viewModel = ViewModelProvider(this).get(DetailsViewModel::class.java)
+        _viewModel = ViewModelProvider(
+            this,
+            DetailsViewModelFactory(ImageLoader.getInstance(requireActivity()))
+        ).get(DetailsViewModel::class.java)
 
         val superHero = DetailsFragmentArgs.fromBundle(requireArguments()).superhero
         _viewModel.setSuperHero(superHero)
@@ -39,6 +43,8 @@ class DetailsFragment : Fragment() {
                 _viewModel.onCompleteSharingSuperHer()
             }
         }
+
+        _viewModel.loadImage(_binding.image)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

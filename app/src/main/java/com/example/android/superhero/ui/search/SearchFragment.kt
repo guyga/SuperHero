@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -15,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.superhero.R
 import com.example.android.superhero.databinding.FragmentSearchBinding
+import com.example.android.superhero.domain.ImageLoader
 import com.example.android.superhero.domain.model.SuperHero
 import com.example.android.superhero.repository.SuperHeroRepository
 
@@ -31,7 +33,10 @@ class SearchFragment : Fragment() {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         _viewModel = ViewModelProvider(
             this,
-            SearchViewModelFactory(SuperHeroRepository.getInstance(requireActivity()))
+            SearchViewModelFactory(
+                SuperHeroRepository.getInstance(requireActivity()),
+                ImageLoader.getInstance(requireActivity())
+            )
         ).get(SearchViewModel::class.java)
 
         _binding.viewModel = _viewModel
@@ -45,7 +50,10 @@ class SearchFragment : Fragment() {
 
         val superHeroSelectedListener = OnSuperHeroSelectedListener(::onSuperHeroSelected)
 
-        _binding.searchResults.adapter = SearchAdapter(superHeroSelectedListener)
+        _binding.searchResults.adapter = SearchAdapter(
+            superHeroSelectedListener,
+            SearchAdapter.LoadImageCallback(::loadImage)
+        )
         _binding.recommendations.adapter = RecommendationAdapter(superHeroSelectedListener)
         _binding.searchResults.addItemDecoration(
             HorizontalSpacingItemDecoration(
@@ -79,6 +87,10 @@ class SearchFragment : Fragment() {
                 _viewModel.onNavigateToDetailsComplete()
             }
         }
+    }
+
+    private fun loadImage(imageView: ImageView, url: String) {
+        _viewModel.loadImage(imageView, url)
     }
 
     /**

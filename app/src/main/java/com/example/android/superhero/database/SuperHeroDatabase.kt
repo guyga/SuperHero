@@ -7,8 +7,9 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.android.superhero.database.converters.*
 import com.example.android.superhero.database.model.SuperHeroDatabaseEntity
+import com.example.android.superhero.database.model.UrlDatabaseEntity
 
-@Database(entities = [SuperHeroDatabaseEntity::class], version = 1)
+@Database(entities = [SuperHeroDatabaseEntity::class, UrlDatabaseEntity::class], version = 2)
 @TypeConverters(value = [StringListConverter::class, SuperHeroAppearanceConverter::class, SuperHeroBiographyConverter::class, SuperHeroConnectionsConverter::class, SuperHeroImageConverter::class, SuperHeroPowerStatsConverter::class, SuperHeroWorkConverter::class])
 abstract class SuperHeroDatabase : RoomDatabase() {
     abstract fun superHeroDao(): SuperHeroDao

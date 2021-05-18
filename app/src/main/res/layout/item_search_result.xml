@@ -23,7 +23,6 @@
             android:layout_height="@dimen/image_height"
             android:adjustViewBounds="true"
             android:scaleType="centerInside"
-            app:image="@{superHero.image.url}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@tools:sample/backgrounds/scenic" />
