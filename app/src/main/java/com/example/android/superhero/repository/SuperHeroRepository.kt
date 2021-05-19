@@ -7,6 +7,8 @@ import com.example.android.superhero.database.SuperHeroDatabase
 import com.example.android.superhero.domain.model.SuperHero
 import com.example.android.superhero.network.SuperHeroServiceApi
 import com.example.android.superhero.network.responses.toDomainSuperHeroes
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class SuperHeroRepository private constructor(
     private val superHeroDao: SuperHeroDao
@@ -17,12 +19,14 @@ class SuperHeroRepository private constructor(
      * Search the superheroapi for results matching [name]
      */
     suspend fun searchSuperHero(name: String): List<SuperHero>? {
-        Log.i(TAG, "Searching for $name")
-        val response = SuperHeroServiceApi.superHeroApi.searchSuperHero(name)
-        if (response.response == "success") {
-            Log.i(TAG, "Searching for $name was successful")
+        return withContext(Dispatchers.IO) {
+            Log.i(TAG, "Searching for $name")
+            val response = SuperHeroServiceApi.superHeroApi.searchSuperHero(name)
+            if (response.response == "success") {
+                Log.i(TAG, "Searching for $name was successful")
+            }
+            return@withContext response.results?.toDomainSuperHeroes()
         }
-        return response.results?.toDomainSuperHeroes()
     }
 
     /**
@@ -31,20 +35,22 @@ class SuperHeroRepository private constructor(
      * Will firstly attempt to retrieve the data locally and then through networking if not found
      */
     suspend fun getSuperHero(id: String): SuperHero? {
-        val cachedSuperHero = superHeroDao.getSuperHero(id)
-        if (cachedSuperHero != null) {
-            Log.i(TAG, "hero $id was found in cache")
-            return cachedSuperHero.toDomainSuperHero()
-        }
+        return withContext(Dispatchers.IO) {
+            val cachedSuperHero = superHeroDao.getSuperHero(id)
+            if (cachedSuperHero != null) {
+                Log.i(TAG, "hero $id was found in cache")
+                return@withContext cachedSuperHero.toDomainSuperHero()
+            }
 
-        Log.i(TAG, "hero $id was not found in cache, retrieving from API")
-        val response = SuperHeroServiceApi.superHeroApi.getSuperHero(id)
-        if (response.response == "success") {
-            Log.i(TAG, "hero $id was successfully retrieved")
-            superHeroDao.insertSuperHero(response.toDatabaseSuperHero())
-            return response.toDomainSuperHero()
+            Log.i(TAG, "hero $id was not found in cache, retrieving from API")
+            val response = SuperHeroServiceApi.superHeroApi.getSuperHero(id)
+            if (response.response == "success") {
+                Log.i(TAG, "hero $id was successfully retrieved")
+                superHeroDao.insertSuperHero(response.toDatabaseSuperHero())
+                return@withContext response.toDomainSuperHero()
+            }
+            return@withContext null
         }
-        return null
     }
 
     companion object {
