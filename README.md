@@ -14,7 +14,7 @@ local.properties exmaple:
 Architectural choices - 
     
   - I decided to use the recommended MVVM architecture, including Navigation for screen navigation.
-  
+  - For passing data to the UI I have mostly used ViewBinding and DataBinding, to improve effiecency and im most cases remove the unnecessary fragment's involvement.
   - Repository layer used when the ViewModel needs to retrieve further data.
     This layer mediates between the ViewModel and the Networking/Database layer.
     
